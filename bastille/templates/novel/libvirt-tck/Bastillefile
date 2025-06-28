@@ -1,0 +1,22 @@
+CONFIG set allow.vmm=1;
+CONFIG set allow.mount;
+CONFIG set allow.mount.devfs;
+CONFIG set allow.mount.fdescfs;
+CONFIG set allow.mount.procfs;
+CONFIG set mount.devfs;
+CONFIG set mount.fdescfs;
+CONFIG set mount.procfs;
+CONFIG set devfs_ruleset="44";
+RESTART
+MOUNT /usr/local/poudriere/data/packages/ usr/local/poudriere/data/packages/ nullfs ro 0 0
+CP usr /
+CP etc /
+CP var /
+PKG git
+PKG p5-XML-Twig p5-IO-String p5-XML-Writer p5-YAML p5-IO-Interface p5-NetAddr-IP p5-Net-OpenSSH p5-Sub-Uplevel p5-Test-Exception
+PKG p5-Sys-Virt libvirt-devel
+PKG py311-avocado-framework
+SYSRC libvirtd_enable=YES
+SERVICE libvirtd start
+CMD git clone https://gitlab.com/libvirt/libvirt-tck
+CMD sed -i -e "s|./conf/default.yml|/etc/libvirt-tck/default.yml|" /root/libvirt-tck/.avocado.hint
