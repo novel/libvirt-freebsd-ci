@@ -1,3 +1,6 @@
+ARG LIBVIRT_TCK_REPO=https://gitlab.com/libvirt/libvirt-tck
+ARG LIBVIRT_TCK_BRANCH=master
+
 CONFIG set allow.vmm=1;
 CONFIG set allow.mount;
 CONFIG set allow.mount.devfs;
@@ -18,5 +21,5 @@ PKG p5-Sys-Virt libvirt-devel
 PKG py311-avocado-framework
 SYSRC libvirtd_enable=YES
 SERVICE libvirtd start
-CMD git clone https://gitlab.com/libvirt/libvirt-tck
+CMD git clone -b "${LIBVIRT_TCK_BRANCH}" "${LIBVIRT_TCK_REPO}"
 CMD sed -i -e "s|./conf/default.yml|/etc/libvirt-tck/default.yml|" /root/libvirt-tck/.avocado.hint
