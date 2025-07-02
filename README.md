@@ -40,6 +40,22 @@ Poudriere needs to have a ports tree and a jail:
 # sudo poudriere ports -c -p libvirt_devel -m git+file -U https://github.com/novel/libvirt-ports-overlay.git
 ```
 
+---
+
+## Jenkins Setup
+
+The [Job DSL](https://plugins.jenkins.io/job-dsl/) plugin is used to define jobs.
+
+Please refer to the plugin's page for information how to create a seed job.
+
+Seed Job params:
+
+ - Add a Git repo, and use URL of this repo: `https://github.com:novel/libvirt-freebsd-ci.git`
+ - Process Job DSLs -> Look on Filesystem -> DSL Scripts: `jenkins/*.groovy`
+
+Might consider enabling `Poll SCM`. After running a job, might need approve the new scripts
+in `Manage Jenkins / In-process Script Approval`.
+
 ## See also
 
 Repository with the ports overlay: [libvirt-ports-overlay](https://github.com/novel/libvirt-ports-overlay.git)
@@ -48,6 +64,3 @@ Repository with the ports overlay: [libvirt-ports-overlay](https://github.com/no
 
  - Document (or better create a script) to install Bastille template and related files
  - Or even better, implement `prepare_host.sh`?
- - Figure out how to export Jenkins job configuration (Job DSL or similar)
- - Figure out how to parametrize job, e.g. to use a different repo/branch for libvirt-tck 
-
