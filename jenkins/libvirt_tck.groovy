@@ -17,10 +17,12 @@ job('libvirt-tck') {
 
     steps {
         shell('''
-sudo bastille destroy -a testrunner
-sudo bastille create testrunner 14.3-RELEASE 10.1.1.4/24
+sudo bastille destroy -y -a testrunner
+sudo bastille create testrunner 14.3-RELEASE DHCP virbr0
 sudo bastille template testrunner novel/libvirt-tck --arg LIBVIRT_TCK_REPO="$LIBVIRT_TCK_REPO" --arg LIBVIRT_TCK_BRANCH="$LIBVIRT_TCK_BRANCH"
-sudo bastille cmd testrunner sh -c "cd /root/libvirt-tck && avocado --config avocado.config  run --xunit ./scripts/domain/*.t ./scripts/storage/*.t" || true
+sudo bastille cmd testrunner sh -c "virsh -c 'bhyve:///system' net-define /usr/local/share/examples/libvirt/networks/default.xml"
+sudo bastille cmd testrunner sh -c "virsh -c 'bhyve:///system' net-start default"
+sudo bastille cmd testrunner sh -c "cd /root/libvirt-tck && avocado --config avocado.config  run --xunit ./scripts/domain/*.t ./scripts/storage/*.t ./scripts/networks/*.t" || true
 sudo bastille rcp testrunner /root/avocado/job-results/latest/ $WORKSPACE/test-results
 '''.stripIndent())
     }
