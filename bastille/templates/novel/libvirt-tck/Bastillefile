@@ -16,7 +16,7 @@ CP usr /
 CP etc /
 CP var /
 PKG git
-PKG p5-XML-Twig p5-IO-String p5-XML-Writer p5-YAML p5-IO-Interface p5-NetAddr-IP p5-Net-OpenSSH p5-Sub-Uplevel p5-Test-Exception
+PKG p5-XML-Twig p5-IO-String p5-XML-Writer p5-YAML p5-IO-Interface p5-NetAddr-IP p5-Net-OpenSSH p5-Sub-Uplevel p5-Test-Exception p5-File-Slurp
 PKG p5-Sys-Virt libvirt-devel
 PKG py311-avocado-framework
 SYSRC libvirtd_enable=YES
