@@ -1,0 +1,35 @@
+ARG LIBVIRT_REPO=https://gitlab.com/libvirt/libvirt
+ARG LIBVIRT_BRANCH=master
+ARG LIBVIRT_TCK_REPO=https://gitlab.com/libvirt/libvirt-tck
+ARG LIBVIRT_TCK_BRANCH=master
+
+
+CONFIG set allow.chflags=1;
+CONFIG set allow.raw_sockets=1;
+
+CONFIG set allow.vmm=1;
+CONFIG set allow.mount;
+CONFIG set allow.mount.devfs;
+CONFIG set allow.mount.fdescfs;
+CONFIG set allow.mount.procfs;
+CONFIG set mount.devfs;
+CONFIG set mount.fdescfs;
+CONFIG set mount.procfs;
+CONFIG set devfs_ruleset="44";
+RESTART
+MOUNT /usr/local/poudriere/data/packages/ usr/local/poudriere/data/packages/ nullfs ro 0 0
+CP usr /
+CP etc /
+CP var /
+PKG git
+PKG p5-XML-Twig p5-IO-String p5-XML-Writer p5-YAML p5-IO-Interface p5-NetAddr-IP p5-Net-OpenSSH p5-Sub-Uplevel p5-Test-Exception p5-File-Slurp
+PKG p5-Sys-Virt edk2-bhyve qemu-tools
+PKG py311-avocado-framework
+# Build from git deps
+PKG meson python3 libxslt py311-docutils gmake gsed gnugrep pkgconf curl
+
+CMD /usr/local/sbin/build_libvirt "${LIBVIRT_REPO}" "${LIBVIRT_BRANCH}"
+SYSRC libvirtd_enable=YES
+SERVICE libvirtd start
+CMD git clone -b "${LIBVIRT_TCK_BRANCH}" "${LIBVIRT_TCK_REPO}"
+CMD sed -i -e "s|./conf/default.yml|/etc/libvirt-tck/default.yml|" /root/libvirt-tck/.avocado.hint

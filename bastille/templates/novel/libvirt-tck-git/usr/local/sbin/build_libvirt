@@ -1,0 +1,43 @@
+#!/bin/sh
+
+REPO=$1
+BRANCH=$2
+
+git clone -b "${BRANCH}" "${REPO}"
+cd libvirt
+meson --prefix /usr/local --localstatedir /var  --infodir share/info \
+	--auto-features=enabled -Dpython.bytecompile=-1 -Db_colorout=never \
+	--buildtype release  --optimization plain  --strip -Dapparmor=disabled  \
+	-Dapparmor_profiles=disabled  -Dattr=disabled  -Daudit=disabled  \
+	-Dblkid=disabled  -Dcapng=disabled  -Ddriver_ch=disabled  \
+	-Ddriver_hyperv=disabled  -Ddriver_interface=disabled  \
+	-Ddriver_libxl=disabled  -Ddriver_lxc=disabled  \
+	-Ddriver_openvz=disabled  -Ddriver_remote=enabled  \
+	-Ddriver_vz=disabled  -Dfirewalld=disabled  \
+	-Dfirewalld_zone=disabled  -Dfuse=disabled  \
+	-Dglusterfs=disabled  -Dlibiscsi=disabled  \
+	-Dlibnl=disabled  -Dlibpcap=disabled  -Dnumactl=disabled  \
+	-Dnumad=disabled  -Dopenwsman=disabled  -Dpciaccess=disabled  \
+	-Dpolkit=disabled  -Dsanlock=disabled  -Dsecdriver_apparmor=disabled  \
+	-Dsecdriver_selinux=disabled  -Dselinux=disabled  -Dssh_proxy=disabled  \
+	-Dstorage_disk=disabled  -Dstorage_fs=disabled  \
+	-Dstorage_gluster=disabled  -Dstorage_iscsi=disabled  \
+	-Dstorage_iscsi_direct=disabled  -Dstorage_lvm=disabled  \
+	-Dstorage_mpath=disabled  -Dstorage_rbd=disabled  \
+	-Dstorage_vstorage=disabled  -Dudev=disabled  \
+	-Dnetcf=disabled  -Dsysctl_config=disabled  \
+	-Dnbdkit=disabled  -Dnbdkit_config_default=disabled  \
+	-Dlogin_shell=disabled  -Dwireshark_dissector=disabled  \
+	-Dinit_script=none  -Dbash_completion=disabled  \
+	-Duserfaultfd_sysctl=disabled  -Drunstatedir=/var/run \
+	-Ddriver_bhyve=enabled -Dlibssh=enabled -Dlibssh2=enabled \
+	-Dnls=disabled -Dnss=disabled -Ddriver_qemu=disabled \
+	-Dreadline=enabled -Dsasl=disabled -Ddriver_libxl=disabled \
+	-Dstorage_zfs=enabled -Djson_c=enabled \
+	_build
+ninja -C _build test
+
+# Not to conflict with host networking
+sed -i.bak -e 's|192.168.122|192.168.223|g' _build/src/network/default.xml	
+
+ninja -C _build install
