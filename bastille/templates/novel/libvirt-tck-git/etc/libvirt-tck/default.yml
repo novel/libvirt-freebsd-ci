@@ -48,6 +48,10 @@ images:
     ostype:
       - hvm
     osname: freebsd-11.1
+  - arch: aarch64
+    ostype:
+      - hvm
+    osname: freebsd-11.1
 
 #
 # Where the kernel/initrd files needed by tests are to be
