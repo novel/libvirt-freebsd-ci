@@ -77,7 +77,23 @@ and can then be reused for subsequent test runs. So it's way simpler
 to either re-use a pre-generated image or implement a script
 to generate it.
 
-TODO: upload the image somewhere or add a script.
+The image needs to be configured in a way that it accepts SSH connections
+for `root` with the generated SSH key.
+
+For the FreeBSD image that means adding
+
+```
+sshd_enable="YES"
+```
+to `/etc/rc.conf`.
+
+And updating `/etc/ssh/sshd_config` with:
+
+```
+PermitRootLogin yes
+```
+
+And of course adding the public SSH key you generated to `/root/.ssh/authorized_keys`.
 
 ## See also
 
