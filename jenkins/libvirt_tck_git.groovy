@@ -19,11 +19,11 @@ job('libvirt-tck-git') {
 
     steps {
         shell('''
-sudo bastille destroy -y -a testrunner-git || true
-sudo bastille create -B testrunner-git 14.3-RELEASE DHCP virbr0
-sudo bastille template testrunner-git novel/libvirt-tck-git --arg LIBVIRT_TCK_REPO="$LIBVIRT_TCK_REPO" --arg LIBVIRT_TCK_BRANCH="$LIBVIRT_TCK_BRANCH" --arg LIBVIRT_REPO="$LIBVIRT_REPO" --arg LIBVIRT_BRANCH="$LIBVIRT_BRANCH"
-sudo bastille cmd testrunner-git sh -c "cd /root/libvirt-tck && avocado --config avocado.config  run --xunit ./scripts/domain/*.t ./scripts/storage/*.t ./scripts/networks/*.t ./scripts/hooks/*.t" || true
-sudo bastille rcp testrunner-git /root/avocado/job-results/latest/ $WORKSPACE/test-results
+sudo bastille destroy -y -a testrunnergit || true
+sudo bastille create -B testrunnergit 15.0-RELEASE DHCP virbr0
+sudo bastille template testrunnergit novel/libvirt-tck-git --arg LIBVIRT_TCK_REPO="$LIBVIRT_TCK_REPO" --arg LIBVIRT_TCK_BRANCH="$LIBVIRT_TCK_BRANCH" --arg LIBVIRT_REPO="$LIBVIRT_REPO" --arg LIBVIRT_BRANCH="$LIBVIRT_BRANCH"
+sudo bastille cmd testrunnergit sh -c "cd /root/libvirt-tck && avocado --config avocado.config  run --xunit ./scripts/domain/*.t ./scripts/storage/*.t ./scripts/networks/*.t ./scripts/hooks/*.t" || true
+sudo bastille rcp testrunnergit /root/avocado/job-results/latest/ $WORKSPACE/test-results
 '''.stripIndent())
     }
 
