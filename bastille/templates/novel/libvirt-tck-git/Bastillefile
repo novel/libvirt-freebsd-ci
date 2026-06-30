@@ -24,9 +24,9 @@ CP var /
 PKG git
 PKG p5-XML-Twig p5-IO-String p5-XML-Writer p5-YAML p5-IO-Interface p5-NetAddr-IP p5-Net-OpenSSH p5-Sub-Uplevel p5-Test-Exception p5-File-Slurp
 PKG p5-Sys-Virt edk2-bhyve qemu-tools
-PKG py311-avocado-framework
+PKG py312-avocado-framework
 # Build from git deps
-PKG meson python3 libxslt py311-docutils gmake gsed gnugrep pkgconf curl
+PKG meson python3 libxslt py312-docutils gmake gsed gnugrep pkgconf curl
 
 CMD /usr/local/sbin/build_libvirt "${LIBVIRT_REPO}" "${LIBVIRT_BRANCH}"
 SYSRC libvirtd_enable=YES
